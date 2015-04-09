@@ -4,7 +4,7 @@ Grid is a torus, i.e. cells on the edges wrap around to the other side.
 
 Run with:
 	
-	$ python3 game_of_life.py -input input_filename.txt
+	$ python3 game_of_life.py --input input_filename.txt
 
 If you don't want to speciy an input filename, the default is `input_0.txt`. You can simply run this with
 
