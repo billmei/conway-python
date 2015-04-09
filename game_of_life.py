@@ -114,7 +114,7 @@ def conway(iterations, width, height, grid):
     for generation in range(iterations):
         # Build a new grid for the next generation
         new_grid = grid
-        print('Running generation', str(generation),'...')
+        print('Running generation', str(generation), '...')
 
         for cell in grid:
             # Get all the neighbors
@@ -142,8 +142,8 @@ def neighbors(cell, width, height):
     """
     Returns an array of tuples with all neighbors of the given cell
     """
-    x = cell[0] # == 3
-    y = cell[1] # == 3
+    x = cell[0]
+    y = cell[1]
 
     return [
         (x-1 if x-1 >= 0 else width-1, y-1 if y-1 >= 0 else height-1),
@@ -160,26 +160,26 @@ def test():
     """Unit testing"""
     for cell in neighbors((3, 3), 4, 4):
         assert cell in [
-            (0,0),
-            (0,2),
-            (0,3),
-            (2,0),
-            (2,2),
-            (2,3),
-            (3,0),
-            (3,2),
+            (0, 0),
+            (0, 2),
+            (0, 3),
+            (2, 0),
+            (2, 2),
+            (2, 3),
+            (3, 0),
+            (3, 2),
         ]
 
     for cell in neighbors((0, 0), 5, 5):
         assert cell in [
-            (0,1),
-            (1,0),
-            (1,1),
-            (4,4),
-            (0,4),
-            (4,0),
-            (1,4),
-            (4,1),
+            (0, 1),
+            (1, 0),
+            (1, 1),
+            (4, 4),
+            (0, 4),
+            (4, 0),
+            (1, 4),
+            (4, 1),
         ]
     assert conway(5, 3, 3, {(0, 1): 0, (1, 2): 0, (0, 0): 0, (2, 1): 0, (1, 1): 1, (2, 0): 0, (2, 2): 0, (1, 0): 0, (0, 2): 0}
         ) == {(0, 1): 0, (1, 2): 0, (0, 0): 0, (2, 1): 0, (1, 1): 0, (2, 0): 0, (2, 2): 0, (1, 0): 0, (0, 2): 0}
