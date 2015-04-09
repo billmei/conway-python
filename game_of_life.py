@@ -33,9 +33,8 @@ def main():
     if use_stdout:
         iterations = int(input('Number of iterations: '))
         line = input('Width and height: ')
-        line = line.split()
-        width = int(line[0])
-        height = int(line[-1])
+        line = map(int, line.split())
+        width, height = line
 
         row = 0
         while True:
@@ -70,6 +69,11 @@ def main():
             outfile_name = 'output_' + str(outfile_num)
 
         output_file = open('output_'+ str(outfile_num) +'.txt', 'a')
+
+    # Don't assume the input is valid
+    if len(grid) != width * height:
+        raise Exception('The grid provided does not match the ' + \
+            'specified width and height')
 
     # Run the simulation
     grid = conway(iterations, width, height, grid)
