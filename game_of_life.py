@@ -33,6 +33,7 @@ def main():
     if use_stdout:
         iterations = int(input('Number of iterations: '))
         line = input('Width and height: ')
+        line = line.split()
         width = int(line[0])
         height = int(line[-1])
 
@@ -86,8 +87,7 @@ def main():
 
     for cell in grid:
         # Populate nested array
-        row = cell[0]
-        col = cell[1]
+        row, col = cell
         value = grid[(row, col)]
         output[row][col] = value
 
@@ -142,8 +142,7 @@ def neighbors(cell, width, height):
     """
     Returns an array of tuples with all neighbors of the given cell
     """
-    x = cell[0]
-    y = cell[1]
+    x, y = cell
 
     return [
         (x-1 if x-1 >= 0 else width-1, y-1 if y-1 >= 0 else height-1),
