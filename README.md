@@ -14,4 +14,8 @@ Run all tests with
 
 	$ python3 game_of_life.py -m test
 
+If you want to read/write from stdin/stdout instead of using files, specify `stdin` with the `-m` flag:
+
+	$ python3 game_of_life.py -m stdin
+
 Use `input_0.txt` or `input_1.txt` for examples of input files.

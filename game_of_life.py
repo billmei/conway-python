@@ -8,10 +8,13 @@ import os.path
 import sys
 
 def main():
+    use_stdout = False
     if '-m' in sys.argv:
         if sys.argv[-1] == 'test':
             test()
             return
+        elif sys.argv[-1] == 'stdin':
+            use_stdout = True
 
     elif '--input' in sys.argv:
         try:
@@ -22,38 +25,56 @@ def main():
     else:
         input_file = open('input_0.txt', 'r')
 
-    outfile_num = 0
-    outfile_name = 'output_' + str(outfile_num)
-    while os.path.isfile(outfile_name + '.txt'):
-        outfile_num += 1
-        outfile_name = 'output_' + str(outfile_num)
-
-    output_file = open('output_'+ str(outfile_num) +'.txt', 'a')
-
     iterations = 0
     height = 0
     width = 0
     grid = {}
 
-    # Process input from file
-    for i, line in enumerate(input_file):
-        if i == 0:
-            iterations = int(line.strip())
-        elif i == 1:
-            line = line.split()
-            width = int(line[0])
-            height = int(line[-1])
-        else:
-            row = i - 2
+    if use_stdout:
+        iterations = int(input('Number of iterations: '))
+        line = input('Width and height: ')
+        width = int(line[0])
+        height = int(line[-1])
+
+        row = 0
+        while True:
+            line = input('Enter the starting grid (row '+ str(row) +'): ')
+            if len(line) == 0:
+                break
+
             line = map(int, line.split())
             for col, value in enumerate(line):
                 grid[(row, col)] = value
+            row += 1
+
+    else:
+        # Process input from file
+        for i, line in enumerate(input_file):
+            if i == 0:
+                iterations = int(line.strip())
+            elif i == 1:
+                line = line.split()
+                width = int(line[0])
+                height = int(line[-1])
+            else:
+                row = i - 2
+                line = map(int, line.split())
+                for col, value in enumerate(line):
+                    grid[(row, col)] = value
+
+        outfile_num = 0
+        outfile_name = 'output_' + str(outfile_num)
+        while os.path.isfile(outfile_name + '.txt'):
+            outfile_num += 1
+            outfile_name = 'output_' + str(outfile_num)
+
+        output_file = open('output_'+ str(outfile_num) +'.txt', 'a')
 
     # Run the simulation
     grid = conway(iterations, width, height, grid)
-    print('See', outfile_name + '.txt for the output.')
+    if not use_stdout:
+        print('See', outfile_name + '.txt for the output.')
 
-    # Print output to file
     # Convert to a nested array first
     output = []
     for row in range(height):
@@ -70,13 +91,19 @@ def main():
         value = grid[(row, col)]
         output[row][col] = value
 
-    for row in output:
-        # Write to file
-        row = map(str, row)
-        output_file.write(' '.join(row) + '\n')
+    if use_stdout:
+        # Write output to stdout
+        for row in output:
+            row = map(str, row)
+            print(' '.join(row))
+    else:
+        # Write output to file
+        for row in output:
+            row = map(str, row)
+            output_file.write(' '.join(row) + '\n')
 
-    input_file.close()
-    output_file.close()
+        input_file.close()
+        output_file.close()
 
 def conway(iterations, width, height, grid):
     """
