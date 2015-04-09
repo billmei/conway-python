@@ -1,13 +1,27 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 Conway's Game of life implementation in Python.
 Grid is a torus, i.e. cells on the edges wrap around to the other side.
 """
 from __future__ import print_function
 import os.path
+import sys
 
 def main():
-    input_file = open('input.txt', 'r')
+    if '-m' in sys.argv:
+        if sys.argv[-1] == 'test':
+            test()
+            return
+
+    elif '--input' in sys.argv:
+        try:
+            input_file = open(sys.argv[-1], 'r')
+        except IOError:
+            print('Could not find the file', sys.argv[-1])
+            return
+    else:
+        input_file = open('input_0.txt', 'r')
+
     outfile_num = 0
     outfile_name = 'output_' + str(outfile_num)
     while os.path.isfile(outfile_name + '.txt'):
@@ -64,19 +78,6 @@ def main():
     input_file.close()
     output_file.close()
 
-
-def build_empty_grid(width, height):
-    """
-    Initializes an empty grid with the appropriate dictionary keys
-    """
-    grid = {}
-    for row in range(width):
-        for col in range(height):
-            grid[(row, col)] = 0
-
-    return grid
-
-
 def conway(iterations, width, height, grid):
     """
     Implementation of Conway's game of life based on a dictionary as a grid.
@@ -86,7 +87,7 @@ def conway(iterations, width, height, grid):
     for generation in range(iterations):
         # Build a new grid for the next generation
         new_grid = grid
-        print('Generation', str(generation))
+        print('Running generation', str(generation),'...')
 
         for cell in grid:
             # Get all the neighbors
@@ -128,12 +129,8 @@ def neighbors(cell, width, height):
         (x, y+1 if y+1 < height-1 else 0),
     ]
 
-
-
 def test():
     """Unit testing"""
-    assert build_empty_grid(1,1) == {(0, 0): 0}
-    assert build_empty_grid(2,2) == {(0, 0): 0, (0, 1):0, (1, 0): 0, (1, 1): 0}
     for cell in neighbors((3, 3), 4, 4):
         assert cell in [
             (0,0),
@@ -163,7 +160,5 @@ def test():
         ) == {(1, 3): 0, (3, 0): 0, (2, 1): 0, (0, 3): 0, (4, 0): 0, (1, 2): 0, (3, 3): 0, (4, 4): 0, (2, 2): 0, (4, 1): 0, (1, 1): 1, (3, 2): 0, (0, 0): 1, (0, 4): 0, (1, 4): 0, (2, 3): 0, (4, 2): 0, (1, 0): 1, (0, 1): 1, (3, 1): 0, (2, 4): 0, (2, 0): 0, (4, 3): 0, (3, 4): 0, (0, 2): 0}
     print("All tests pass")
 
-
 if __name__ == '__main__':
-    test()
     main()
