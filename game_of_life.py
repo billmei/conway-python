@@ -6,6 +6,7 @@ Grid is a torus, i.e. cells on the edges wrap around to the other side.
 from __future__ import print_function
 import os.path
 import sys
+import copy
 
 def main():
     use_stdout = False
@@ -116,8 +117,10 @@ def conway(iterations, width, height, grid):
     the specified number of iterations.
     """
     for generation in range(iterations):
-        # Build a new grid for the next generation
-        new_grid = grid
+        # Build a new grid for the next generation.
+        # this prevents modified values from affecting calculations before
+        # the for loop finished computing all new cell values.
+        new_grid = copy.copy(grid)
         print('Running generation', str(generation), '...')
 
         for cell in grid:
